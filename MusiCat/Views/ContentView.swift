@@ -18,8 +18,8 @@ struct ContentView: View {
             Tab("Playlists", systemImage: "music.note.list") {
                 NavigationStack { PlaylistsView() }
             }
-            Tab("Sources", systemImage: "externaldrive.connected.to.line.below") {
-                NavigationStack { SourcesView() }
+            Tab("Settings", systemImage: "gearshape") {
+                NavigationStack { SettingsView() }
             }
         }
         .safeAreaInset(edge: .bottom) {
@@ -81,7 +81,7 @@ struct SongsView: View {
                     if library.isScanning {
                         ProgressView()
                     } else {
-                        ContentUnavailableView("No Music Yet", systemImage: "music.note", description: Text("Connect your FileCat library or add a folder in Sources."))
+                        ContentUnavailableView("No Music Yet", systemImage: "music.note", description: Text("Connect your FileCat library or add a folder in Settings."))
                     }
                 }
             }

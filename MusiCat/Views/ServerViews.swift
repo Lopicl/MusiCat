@@ -1,7 +1,7 @@
 import FileCatKit
 import SwiftUI
 
-/// The servers section of Sources: servers imported from FileCat, and the ones still to import.
+/// The servers section of Settings: servers imported from FileCat, and the ones still to import.
 struct ServersSection: View {
     @Environment(MusicLibrary.self) private var library
     @Environment(\.openURL) private var openURL

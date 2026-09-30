@@ -1,12 +1,14 @@
 import FileCatKit
 import SwiftUI
 
-/// Where MusiCat finds music: FileCat's library, its servers, and folders added here.
-struct SourcesView: View {
+/// Where MusiCat finds music (FileCat's library, its servers, and folders added here), the
+/// hi-res audio status, and the long cat at the end.
+struct SettingsView: View {
     @Environment(MusicLibrary.self) private var library
     @Environment(HiResPlayer.self) private var player
     @State private var picking: Picking?
     @State private var errorMessage: String?
+    @State private var meows = 0
 
     private enum Picking: Identifiable {
         case fileCat, folder
@@ -14,7 +16,7 @@ struct SourcesView: View {
     }
 
     var body: some View {
-        List {
+        Form {
             Section {
                 if library.isConnectedToFileCat {
                     Label("Connected", systemImage: "checkmark.circle.fill")
@@ -62,10 +64,18 @@ struct SourcesView: View {
             } header: {
                 Text("Hi-Res Audio")
             } footer: {
-                Text("Plug in a USB DAC with a Lightning or USB-C adapter: MusiCat switches it to each song's own sample rate, up to 192 kHz, for WAV, FLAC and ALAC.")
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Plug in a USB DAC with a Lightning or USB-C adapter: MusiCat switches it to each song's own sample rate, up to 192 kHz, for WAV, FLAC and ALAC.")
+                    LongCat(meows: meows)
+                }
             }
         }
-        .navigationTitle("Sources")
+        .onHardOverscroll {
+            meows += 1
+            Meow.play()
+        }
+        .sensoryFeedback(.impact(weight: .light), trigger: meows)
+        .navigationTitle("Settings")
         .fileImporter(isPresented: Binding(get: { picking != nil }, set: { if !$0 { picking = nil } }), allowedContentTypes: [.folder]) { result in
             let kind = picking
             picking = nil

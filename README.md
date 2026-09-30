@@ -4,7 +4,7 @@ A music player for FileCat's library, built with `FileCatKit`. Bundle ID `com.lo
 URL scheme `musicat://` (FileCat's *Settings › Companion Apps* opens it).
 
 What's there so far:
-- **Sources**: connect FileCat's Local Storage (folder picker, remembered with a bookmark), add
+- **Settings**: connect FileCat's Local Storage (folder picker, remembered with a bookmark), add
   other folders, and see the folders added in FileCat (from its library manifest). iOS gives each
   app its own access, so FileCat's folders have to be picked once in MusiCat too.
 - **FileCat's servers** (SMB, NFS, WebDAV, Nextcloud): *Import Servers from FileCat* opens
@@ -23,8 +23,9 @@ What's there so far:
 - **Playlists**: create, rename, reorder, delete; saved as JSON in Application Support.
 - **Hi-res playback**: WAV, FLAC and ALAC (and MP3/AAC) through AVAudioEngine. Before each song
   the audio session asks the output for the file's own sample rate, so a USB DAC runs at 44.1 to
-  192 kHz without resampling; *Sources › Hi-Res Audio* shows the file's format and whether the
-  output matches it.
+  192 kHz without resampling; *Settings › Hi-Res Audio* shows the file's format and whether the
+  output matches it. At the end of Settings is the same long cat as in FileCat, which meows
+  when you pull hard past the end.
 
 ## Building
 
