@@ -18,6 +18,21 @@ struct MusiCatApp: App {
         }
         #endif
         let library = MusicLibrary()
+        #if DEBUG && targetEnvironment(simulator)
+        // For FileCat's UI tests: `-MusiCatUITestConnectFileCat YES` connects to FileCat's
+        // library on the same simulator without the folder picker.
+        if UserDefaults.standard.bool(forKey: "MusiCatUITestConnectFileCat") {
+            let containers = URL.homeDirectory.deletingLastPathComponent()
+            let libraries = (try? FileManager.default.contentsOfDirectory(at: containers, includingPropertiesForKeys: nil)) ?? []
+            let fileCat = libraries.first { container in
+                let metadata = NSDictionary(contentsOf: container.appending(path: ".com.apple.mobile_container_manager.metadata.plist"))
+                return metadata?["MCMMetadataIdentifier"] as? String == "com.lopicl.FileCat"
+            }
+            if let documents = fileCat?.appending(path: "Documents") {
+                try? library.connectFileCat(to: documents)
+            }
+        }
+        #endif
         _library = State(initialValue: library)
         _player = State(initialValue: HiResPlayer(servers: library.servers))
     }
@@ -37,8 +52,8 @@ struct MusiCatApp: App {
                 }
         }
         .onChange(of: scenePhase) {
-            // Servers may have changed in FileCat meanwhile.
-            if scenePhase == .active { library.syncServers() }
+            // Servers and folders may have changed in FileCat meanwhile.
+            if scenePhase == .active, library.syncWithFileCat() { Task { await library.refresh() } }
         }
     }
 }

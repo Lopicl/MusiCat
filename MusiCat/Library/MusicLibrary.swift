@@ -2,20 +2,35 @@ import AVFoundation
 import FileCatKit
 import Observation
 
-/// Every song MusiCat can play: those in FileCat's Local Storage (through FileCatKit), folders
-/// the user added in MusiCat itself (for example the same USB drive or iCloud folder added in
-/// FileCat: access to those belongs to FileCat, so MusiCat asks for them once too), and the music
-/// folders chosen on servers imported from FileCat.
+/// A folder MusiCat takes music from: one of FileCat's folders, which it follows, or one added
+/// in MusiCat itself.
+struct MusicFolder: Codable, Hashable, Identifiable {
+    var id = UUID().uuidString
+    var name: String
+    var bookmark: Data
+    /// The FileCat folder this one follows (`SharedLocation.id`); removing it there removes it here.
+    var fileCatID: String?
+}
+
+/// Every song MusiCat can play: those in FileCat's Local Storage (through FileCatKit), the folders
+/// and drives added in FileCat's Connections tab (followed automatically, see `syncWithFileCat`),
+/// folders added in MusiCat itself, and the music folders chosen on servers imported from FileCat.
 @MainActor
 @Observable
 final class MusicLibrary {
     private(set) var tracks: [Track] = []
     private(set) var isScanning = false
-    private(set) var folders: [URL] = []
+    private(set) var folders: [MusicFolder] = []
+    /// IDs of FileCat folders that iOS won't open with FileCat's bookmark: the user picks them once.
+    private(set) var fileCatFoldersNeedingAccess: Set<String> = []
 
     let fileCat = FileCatLibrary()
     let servers = ServerStore()
-    private let foldersKey = "MusiCat.folders"
+    private let foldersKey = "MusiCat.musicFolders"
+    /// Before build 5: bookmarks only, for folders added in MusiCat.
+    private let oldFoldersKey = "MusiCat.folders"
+    /// The folders' locations while MusiCat has access to them, by folder ID.
+    @ObservationIgnored private var folderURLs: [String: URL] = [:]
     /// Tags of songs on servers, so they're only read over the network once.
     @ObservationIgnored private var serverTags = ServerTagCache()
 
@@ -30,13 +45,76 @@ final class MusicLibrary {
         (fileCat.manifest?.locations ?? []).filter { $0.kind != .server }
     }
 
-    /// Picks up changes to FileCat's servers. Runs with every refresh too.
-    func syncServers() {
-        servers.sync(with: fileCat.manifest?.servers)
+    /// Folders added in MusiCat itself.
+    var ownFolders: [MusicFolder] {
+        folders.filter { $0.fileCatID == nil }
+    }
+
+    /// The MusiCat folder that follows a FileCat folder.
+    func folder(following location: SharedLocation) -> MusicFolder? {
+        guard let id = location.id else { return nil }
+        return folders.first { $0.fileCatID == id }
+    }
+
+    /// Picks up changes to FileCat's servers and folders, and tells FileCat which of them MusiCat
+    /// uses. Runs with every refresh too. Returns true if folders were added, which need a scan.
+    @discardableResult
+    func syncWithFileCat() -> Bool {
+        let manifest = fileCat.manifest
+        servers.sync(with: manifest?.servers)
         let ids = Set(servers.servers.map(\.id))
         tracks.removeAll { track in
             if case .server(let id, _, _) = track.location { !ids.contains(id) } else { false }
         }
+        let added = syncFolders(with: manifest?.locations)
+        if let root = fileCat.rootURL {
+            let usage = CompanionUsage(app: "MusiCat", locationIDs: folders.compactMap(\.fileCatID).sorted(), serverIDs: ids.sorted())
+            try? usage.write(to: root)
+        }
+        return added
+    }
+
+    /// Follows FileCat's folders: new ones are added (with FileCat's bookmark when iOS allows),
+    /// removed ones go away. Unplugged drives stay. `nil` (FileCat isn't connected, or is too
+    /// old to list IDs) leaves everything as it is.
+    private func syncFolders(with shared: [SharedLocation]?) -> Bool {
+        guard let shared, !shared.contains(where: { $0.id == nil }) else {
+            fileCatFoldersNeedingAccess = []
+            return false
+        }
+        let locations = shared.filter { $0.kind != .server }
+        let ids = Set(locations.compactMap(\.id))
+        for folder in folders where folder.fileCatID.map({ !ids.contains($0) }) == true {
+            removeFolder(folder)
+        }
+        var added = false
+        var needingAccess: Set<String> = []
+        for location in locations where folder(following: location) == nil {
+            let resolved = location.resolveBookmark()
+            // The same folder, added here by hand before, now follows FileCat's.
+            if let url = resolved?.url, let index = folders.firstIndex(where: { $0.fileCatID == nil && folderURLs[$0.id].map { Self.isSameFolder($0, url) } == true }) {
+                folders[index].fileCatID = location.id
+                continue
+            }
+            if let resolved, resolved.isReadable {
+                let accessing = resolved.url.startAccessingSecurityScopedResource()
+                let bookmark = (try? resolved.url.bookmarkData()) ?? location.bookmark
+                if accessing { resolved.url.stopAccessingSecurityScopedResource() }
+                if let bookmark {
+                    folders.append(MusicFolder(name: location.name, bookmark: bookmark, fileCatID: location.id))
+                    added = true
+                    continue
+                }
+            }
+            // An unplugged drive is picked once it's back.
+            if location.isConnected != false, let id = location.id {
+                needingAccess.insert(id)
+            }
+        }
+        if needingAccess != fileCatFoldersNeedingAccess { fileCatFoldersNeedingAccess = needingAccess }
+        saveFolders()
+        if added { restoreFolders() }
+        return added
     }
 
     var artists: [String] {
@@ -67,23 +145,67 @@ final class MusicLibrary {
         Task { await refresh() }
     }
 
-    func addFolder(_ url: URL) throws {
+    /// Adds a folder the user picked. With `location`, it's the FileCat folder it follows.
+    func addFolder(_ url: URL, following location: SharedLocation? = nil) throws {
         let accessing = url.startAccessingSecurityScopedResource()
         defer { if accessing { url.stopAccessingSecurityScopedResource() } }
         let bookmark = try url.bookmarkData()
-        var saved = UserDefaults.standard.array(forKey: foldersKey) as? [Data] ?? []
-        saved.append(bookmark)
-        UserDefaults.standard.set(saved, forKey: foldersKey)
+        folders.append(MusicFolder(name: location?.name ?? url.lastPathComponent, bookmark: bookmark, fileCatID: location?.id))
+        if let id = location?.id { fileCatFoldersNeedingAccess.remove(id) }
+        saveFolders()
         restoreFolders()
         Task { await refresh() }
     }
 
-    private func restoreFolders() {
-        let saved = UserDefaults.standard.array(forKey: foldersKey) as? [Data] ?? []
-        folders = saved.compactMap { data in
-            var stale = false
-            return try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &stale)
+    /// Removes a folder and its songs.
+    func removeFolder(_ folder: MusicFolder) {
+        if let url = folderURLs.removeValue(forKey: folder.id) {
+            let prefix = url.path(percentEncoded: false)
+            tracks.removeAll { track in
+                if case .file(let file) = track.location { file.path(percentEncoded: false).hasPrefix(prefix) } else { false }
+            }
+            url.stopAccessingSecurityScopedResource()
         }
+        folders.removeAll { $0.id == folder.id }
+        saveFolders()
+    }
+
+    /// Resolves the folders' bookmarks, and keeps access to them open so their songs play.
+    private func restoreFolders() {
+        if folders.isEmpty {
+            if let data = UserDefaults.standard.data(forKey: foldersKey),
+               let saved = try? JSONDecoder().decode([MusicFolder].self, from: data) {
+                folders = saved
+            } else if let old = UserDefaults.standard.array(forKey: oldFoldersKey) as? [Data] {
+                folders = old.map { MusicFolder(name: "", bookmark: $0) }
+            }
+        }
+        for index in folders.indices where folderURLs[folders[index].id] == nil {
+            var stale = false
+            guard let url = try? URL(resolvingBookmarkData: folders[index].bookmark, bookmarkDataIsStale: &stale) else { continue }
+            _ = url.startAccessingSecurityScopedResource()
+            folderURLs[folders[index].id] = url
+            if folders[index].name.isEmpty { folders[index].name = url.lastPathComponent }
+            if stale, let fresh = try? url.bookmarkData() { folders[index].bookmark = fresh }
+        }
+        saveFolders()
+    }
+
+    private func saveFolders() {
+        if let data = try? JSONEncoder().encode(folders) {
+            UserDefaults.standard.set(data, forKey: foldersKey)
+        }
+        UserDefaults.standard.removeObject(forKey: oldFoldersKey)
+    }
+
+    /// Whether a folder could be reached in the last scan (an unplugged drive can't).
+    func isReachable(_ folder: MusicFolder) -> Bool {
+        folderURLs[folder.id].map { FileManager.default.fileExists(atPath: $0.path(percentEncoded: false)) } ?? false
+    }
+
+    private static func isSameFolder(_ a: URL, _ b: URL) -> Bool {
+        a.standardizedFileURL.resolvingSymlinksInPath().path(percentEncoded: false)
+            == b.standardizedFileURL.resolvingSymlinksInPath().path(percentEncoded: false)
     }
 
     // MARK: Scanning
@@ -92,13 +214,16 @@ final class MusicLibrary {
         guard !isScanning else { return }
         isScanning = true
         defer { isScanning = false }
-        syncServers()
+        syncWithFileCat()
+        // Drives plugged in since the last scan.
+        restoreFolders()
 
         var files: [(url: URL, id: String)] = fileCat.files(ofKinds: [.audio])
             .filter { Track.extensions.contains($0.url.pathExtension.lowercased()) }
             .map { ($0.url, "filecat:" + $0.relativePath) }
         for folder in folders {
-            files += await Task.detached { Self.audioFiles(in: folder) }.value
+            guard let url = folderURLs[folder.id] else { continue }
+            files += await Task.detached { Self.audioFiles(in: url) }.value
         }
         var found: [Track] = []
         for file in files {

@@ -12,7 +12,16 @@ struct SettingsView: View {
 
     private enum Picking: Identifiable {
         case fileCat, folder
-        var id: Self { self }
+        /// The folder MusiCat follows for one of FileCat's.
+        case fileCatFolder(SharedLocation)
+
+        var id: String {
+            switch self {
+            case .fileCat: "fileCat"
+            case .folder: "folder"
+            case .fileCatFolder(let location): "fileCat:" + (location.id ?? location.name)
+            }
+        }
     }
 
     var body: some View {
@@ -36,7 +45,7 @@ struct SettingsView: View {
                 Section {
                     ForEach(library.fileCatFolders, id: \.self) { location in
                         LabeledContent {
-                            Button("Add…") { picking = .folder }
+                            fileCatFolderStatus(location)
                         } label: {
                             Label(location.name, systemImage: symbol(for: location.kind))
                         }
@@ -44,13 +53,21 @@ struct SettingsView: View {
                 } header: {
                     Text("Folders in FileCat")
                 } footer: {
-                    Text("Folders and drives added in FileCat. iOS gives each app its own access, so pick them once here too.")
+                    if library.fileCatFoldersNeedingAccess.isEmpty {
+                        Text("Folders and drives added in FileCat show up here by themselves, and go away when they're removed there.")
+                    } else {
+                        Text("Folders and drives added in FileCat show up here by themselves. iOS wants some picked once here too: tap Add and choose the same folder.")
+                    }
                 }
             }
 
             Section("Folders") {
-                ForEach(library.folders, id: \.self) { folder in
-                    Label(folder.lastPathComponent, systemImage: "folder")
+                ForEach(library.ownFolders) { folder in
+                    Label(folder.name, systemImage: "folder")
+                }
+                .onDelete { offsets in
+                    let folders = library.ownFolders
+                    offsets.map { folders[$0] }.forEach(library.removeFolder)
                 }
                 Button("Add Folder…", systemImage: "folder.badge.plus") { picking = .folder }
             }
@@ -81,10 +98,10 @@ struct SettingsView: View {
             picking = nil
             do {
                 let url = try result.get()
-                if kind == .fileCat {
-                    try library.connectFileCat(to: url)
-                } else {
-                    try library.addFolder(url)
+                switch kind {
+                case .fileCat: try library.connectFileCat(to: url)
+                case .fileCatFolder(let location): try library.addFolder(url, following: location)
+                case .folder, nil: try library.addFolder(url)
                 }
             } catch {
                 errorMessage = error.localizedDescription
@@ -94,6 +111,22 @@ struct SettingsView: View {
             Button("OK") {}
         } message: {
             Text(errorMessage ?? "")
+        }
+    }
+
+    @ViewBuilder
+    private func fileCatFolderStatus(_ location: SharedLocation) -> some View {
+        if let id = location.id, library.fileCatFoldersNeedingAccess.contains(id) {
+            Button("Add…") { picking = .fileCatFolder(location) }
+        } else if location.isConnected == false || library.folder(following: location).map(library.isReachable) == false {
+            Text(location.kind == .drive ? "Not Plugged In" : "Not Connected")
+        } else if library.folder(following: location) != nil {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(.green)
+                .accessibilityLabel("In Library")
+        } else {
+            // FileCat from before it shared folders: pick them by hand.
+            Button("Add…") { picking = .folder }
         }
     }
 
