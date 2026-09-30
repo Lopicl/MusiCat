@@ -13,7 +13,11 @@ final class SongDownloads {
     private(set) var progress: [String: Double] = [:]
     @ObservationIgnored private var running: [String: Task<URL, Error>] = [:]
 
-    nonisolated static let limit: Int64 = 3 * 1024 * 1024 * 1024
+    /// How much the downloads may take up, set in Settings (3 GB unless changed).
+    nonisolated static var limit: Int64 {
+        let gigabytes = UserDefaults.standard.object(forKey: MusiCatSettings.downloadLimit) as? Int ?? 3
+        return Int64(gigabytes) * 1024 * 1024 * 1024
+    }
     nonisolated static var folder: URL {
         URL.cachesDirectory.appending(path: "Songs", directoryHint: .isDirectory)
     }
@@ -78,6 +82,28 @@ final class SongDownloads {
         try? FileManager.default.removeItem(at: folder.appending(path: serverID, directoryHint: .isDirectory))
     }
 
+    /// Settings → Remove Downloaded Songs. They're downloaded again when played.
+    func removeAll() async {
+        cancel(except: [])
+        await Task.detached(priority: .userInitiated) {
+            try? FileManager.default.removeItem(at: Self.folder)
+        }.value
+    }
+
+    /// The space the downloaded songs take up.
+    nonisolated static func size() async -> Int64 {
+        await Task.detached(priority: .utility) {
+            let keys: Set<URLResourceKey> = [.totalFileAllocatedSizeKey, .isRegularFileKey]
+            guard let enumerator = FileManager.default.enumerator(at: folder, includingPropertiesForKeys: Array(keys)) else { return 0 }
+            var total: Int64 = 0
+            while let url = enumerator.nextObject() as? URL {
+                guard let values = try? url.resourceValues(forKeys: keys), values.isRegularFile == true else { continue }
+                total += Int64(values.totalFileAllocatedSize ?? 0)
+            }
+            return total
+        }.value
+    }
+
     private nonisolated static func isComplete(_ url: URL, size: Int64?) -> Bool {
         guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path(percentEncoded: false)) else { return false }
         guard let size else { return true }
@@ -85,7 +111,7 @@ final class SongDownloads {
     }
 
     /// Removes the songs played longest ago until the cache fits in `limit`.
-    private nonisolated static func trim() {
+    nonisolated static func trim() {
         let keys: [URLResourceKey] = [.isRegularFileKey, .fileSizeKey, .contentModificationDateKey]
         guard let enumerator = FileManager.default.enumerator(at: folder, includingPropertiesForKeys: keys) else { return }
         var files: [(url: URL, size: Int64, date: Date)] = []
@@ -94,7 +120,8 @@ final class SongDownloads {
             files.append((url, Int64(values.fileSize ?? 0), values.contentModificationDate ?? .distantPast))
         }
         var total = files.reduce(0) { $0 + $1.size }
-        for file in files.sorted(by: { $0.date < $1.date }) where total > limit {
+        let maximum = Self.limit
+        for file in files.sorted(by: { $0.date < $1.date }) where total > maximum {
             try? FileManager.default.removeItem(at: file.url)
             total -= file.size
         }

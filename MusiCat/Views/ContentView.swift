@@ -1,36 +1,38 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(HiResPlayer.self) private var player
     @State private var showsNowPlaying = false
 
     var body: some View {
         TabView {
             Tab("Songs", systemImage: "music.note") {
                 NavigationStack { SongsView() }
+                    .miniPlayerInset(onOpen: openPlayer)
             }
             Tab("Artists", systemImage: "music.microphone") {
                 NavigationStack { ArtistsView() }
+                    .miniPlayerInset(onOpen: openPlayer)
             }
             Tab("Albums", systemImage: "square.stack") {
                 NavigationStack { AlbumsView() }
+                    .miniPlayerInset(onOpen: openPlayer)
             }
             Tab("Playlists", systemImage: "music.note.list") {
                 NavigationStack { PlaylistsView() }
+                    .miniPlayerInset(onOpen: openPlayer)
             }
             Tab("Settings", systemImage: "gearshape") {
                 NavigationStack { SettingsView() }
-            }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if player.current != nil {
-                NowPlayingBar { showsNowPlaying = true }
-                    .padding(.bottom, 56)
+                    .miniPlayerInset(onOpen: openPlayer)
             }
         }
         .sheet(isPresented: $showsNowPlaying) {
             NowPlayingView()
         }
+    }
+
+    private func openPlayer() {
+        showsNowPlaying = true
     }
 }
 
@@ -72,9 +74,10 @@ struct TrackList: View {
 
 struct SongsView: View {
     @Environment(MusicLibrary.self) private var library
+    @AppStorage(MusiCatSettings.songOrder) private var order = SongOrder.title
 
     var body: some View {
-        TrackList(tracks: library.tracks)
+        TrackList(tracks: order.sorted(library.tracks))
             .navigationTitle("Songs")
             .overlay {
                 if library.tracks.isEmpty {
