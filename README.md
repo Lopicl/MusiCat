@@ -16,7 +16,8 @@ What's there so far:
   subfolders') in the library. Tags are read over the network, only the parts of each file that
   hold them, and cached. Songs download before they play, since hi-res playback needs the whole
   file; the next song in the queue downloads meanwhile, and up to 3 GB stay cached.
-  The protocol code is FileCat's own (`FileCat/FileCat/Network`, the "FileCat Network" group).
+  The protocol code is FileCat's own (`FileCat/FileCat/Network` in the FileCat repository, the
+  "FileCat Network" group).
 - **Songs, Artists, Albums**: tags are read with AVFoundation. Artist tags are split into every
   credited artist ("A feat. B", "A & B", "A, B"), so a song shows under each of them.
 - **Playlists**: create, rename, reorder, delete; saved as JSON in Application Support.
@@ -25,4 +26,15 @@ What's there so far:
   192 kHz without resampling; *Sources › Hi-Res Audio* shows the file's format and whether the
   output matches it.
 
-Open `MusiCat/MusiCat.xcodeproj`. The icon is drawn by `Tools/make-musicat-icon.swift`.
+## Building
+
+MusiCat builds against code in the [FileCat repository](https://github.com/Lopicl/FileCat)
+(`Packages/FileCatKit` and `FileCat/FileCat/Network`), so clone it inside a FileCat checkout:
+
+```
+git clone https://github.com/Lopicl/FileCat.git
+git clone https://github.com/Lopicl/MusiCat.git FileCat/MusiCat
+```
+
+Then open `FileCat/MusiCat/MusiCat.xcodeproj`. The icon is drawn by `Tools/make-musicat-icon.swift`
+in the FileCat repository.
