@@ -87,6 +87,12 @@ final class MusicLibrary {
         for folder in folders where folder.fileCatID.map({ !ids.contains($0) }) == true {
             removeFolder(folder)
         }
+        // Renamed in FileCat (drives get their own name there).
+        for index in folders.indices {
+            if let location = locations.first(where: { $0.id == folders[index].fileCatID }), location.name != folders[index].name {
+                folders[index].name = location.name
+            }
+        }
         var added = false
         var needingAccess: Set<String> = []
         for location in locations where folder(following: location) == nil {
