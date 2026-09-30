@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AC0100000000000000000003 /* FileCatKit in Frameworks */ = {isa = PBXBuildFile; productRef = AC0100000000000000000002 /* FileCatKit */; };
+		AC0100000000000000001001 /* NetworkSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002001 /* NetworkSource.swift */; };
+		AC0100000000000000001002 /* NetworkSource+Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002002 /* NetworkSource+Sharing.swift */; };
+		AC0100000000000000001003 /* RemoteFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002003 /* RemoteFileSystem.swift */; };
+		AC0100000000000000001004 /* Wire.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002004 /* Wire.swift */; };
+		AC0100000000000000001005 /* SMBCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002005 /* SMBCrypto.swift */; };
+		AC0100000000000000001006 /* SMB2Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002006 /* SMB2Client.swift */; };
+		AC0100000000000000001007 /* SMBFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002007 /* SMBFileSystem.swift */; };
+		AC0100000000000000001008 /* NFSFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002008 /* NFSFileSystem.swift */; };
+		AC0100000000000000001009 /* WebDAVFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002009 /* WebDAVFileSystem.swift */; };
+		AC0100000000000000001010 /* RemoteStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0100000000000000002010 /* RemoteStream.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AC0100000000000000000A01 /* MusiCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MusiCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC0100000000000000000A02 /* MusiCat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MusiCat-Info.plist"; sourceTree = "<group>"; };
+		AC0100000000000000002001 /* NetworkSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSource.swift; sourceTree = "<group>"; };
+		AC0100000000000000002002 /* NetworkSource+Sharing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkSource+Sharing.swift"; sourceTree = "<group>"; };
+		AC0100000000000000002003 /* RemoteFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFileSystem.swift; sourceTree = "<group>"; };
+		AC0100000000000000002004 /* Wire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.swift; sourceTree = "<group>"; };
+		AC0100000000000000002005 /* SMBCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMBCrypto.swift; sourceTree = "<group>"; };
+		AC0100000000000000002006 /* SMB2Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMB2Client.swift; sourceTree = "<group>"; };
+		AC0100000000000000002007 /* SMBFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMBFileSystem.swift; sourceTree = "<group>"; };
+		AC0100000000000000002008 /* NFSFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFSFileSystem.swift; sourceTree = "<group>"; };
+		AC0100000000000000002009 /* WebDAVFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebDAVFileSystem.swift; sourceTree = "<group>"; };
+		AC0100000000000000002010 /* RemoteStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStream.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AC0100000000000000000B01 /* MusiCat */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MusiCat;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC0100000000000000000C02 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC0100000000000000000003 /* FileCatKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AC0100000000000000000D01 = {
+			isa = PBXGroup;
+			children = (
+				AC0100000000000000000B01 /* MusiCat */,
+				AC0100000000000000000D03 /* FileCat Network */,
+				AC0100000000000000000A02 /* MusiCat-Info.plist */,
+				AC0100000000000000000D02 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AC0100000000000000000D02 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC0100000000000000000A01 /* MusiCat.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AC0100000000000000000D03 /* FileCat Network */ = {
+			isa = PBXGroup;
+			children = (
+				AC0100000000000000002001 /* NetworkSource.swift */,
+				AC0100000000000000002002 /* NetworkSource+Sharing.swift */,
+				AC0100000000000000002003 /* RemoteFileSystem.swift */,
+				AC0100000000000000002004 /* Wire.swift */,
+				AC0100000000000000002005 /* SMBCrypto.swift */,
+				AC0100000000000000002006 /* SMB2Client.swift */,
+				AC0100000000000000002007 /* SMBFileSystem.swift */,
+				AC0100000000000000002008 /* NFSFileSystem.swift */,
+				AC0100000000000000002009 /* WebDAVFileSystem.swift */,
+				AC0100000000000000002010 /* RemoteStream.swift */,
+			);
+			name = "FileCat Network";
+			path = ../FileCat/FileCat/Network;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AC0100000000000000000E01 /* MusiCat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC0100000000000000000F02 /* Build configuration list for PBXNativeTarget "MusiCat" */;
+			buildPhases = (
+				AC0100000000000000000C01 /* Sources */,
+				AC0100000000000000000C02 /* Frameworks */,
+				AC0100000000000000000C03 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AC0100000000000000000B01 /* MusiCat */,
+			);
+			name = MusiCat;
+			packageProductDependencies = (
+				AC0100000000000000000002 /* FileCatKit */,
+			);
+			productName = MusiCat;
+			productReference = AC0100000000000000000A01 /* MusiCat.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AC0100000000000000000E02 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					AC0100000000000000000E01 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+				};
+			};
+			buildConfigurationList = AC0100000000000000000F01 /* Build configuration list for PBXProject "MusiCat" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AC0100000000000000000D01;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AC0100000000000000000001 /* XCLocalSwiftPackageReference "../Packages/FileCatKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AC0100000000000000000D02 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AC0100000000000000000E01 /* MusiCat */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AC0100000000000000000C03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC0100000000000000000C01 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC0100000000000000001001 /* NetworkSource.swift in Sources */,
+				AC0100000000000000001002 /* NetworkSource+Sharing.swift in Sources */,
+				AC0100000000000000001003 /* RemoteFileSystem.swift in Sources */,
+				AC0100000000000000001004 /* Wire.swift in Sources */,
+				AC0100000000000000001005 /* SMBCrypto.swift in Sources */,
+				AC0100000000000000001006 /* SMB2Client.swift in Sources */,
+				AC0100000000000000001007 /* SMBFileSystem.swift in Sources */,
+				AC0100000000000000001008 /* NFSFileSystem.swift in Sources */,
+				AC0100000000000000001009 /* WebDAVFileSystem.swift in Sources */,
+				AC0100000000000000001010 /* RemoteStream.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AC0100000000000000000F11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AC0100000000000000000F12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AC0100000000000000000F21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = RN3Q2L2J2Q;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MusiCat-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = MusiCat;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "MusiCat plays music from the servers on your network that you added in FileCat (SMB, NFS and WebDAV).";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lopicl.MusiCat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AC0100000000000000000F22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = RN3Q2L2J2Q;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MusiCat-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = MusiCat;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "MusiCat plays music from the servers on your network that you added in FileCat (SMB, NFS and WebDAV).";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lopicl.MusiCat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AC0100000000000000000F01 /* Build configuration list for PBXProject "MusiCat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC0100000000000000000F11 /* Debug */,
+				AC0100000000000000000F12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC0100000000000000000F02 /* Build configuration list for PBXNativeTarget "MusiCat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC0100000000000000000F21 /* Debug */,
+				AC0100000000000000000F22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AC0100000000000000000001 /* XCLocalSwiftPackageReference "../Packages/FileCatKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Packages/FileCatKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AC0100000000000000000002 /* FileCatKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FileCatKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = AC0100000000000000000E02 /* Project object */;
+}
