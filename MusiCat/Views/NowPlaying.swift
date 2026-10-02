@@ -1,5 +1,4 @@
 import AVKit
-import FileCatKit
 import SwiftUI
 
 extension View {
@@ -46,8 +45,10 @@ struct MiniPlayer: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("miniPlayer")
             .accessibilityAction(named: "Stop Playback") { player.stop() }
-            // As wide as the tab bar's pill below it.
-            .matchingTabBarPill()
+            // Always full width, as wide as the tab bar's pill with all its tabs (it sits 21pt in on
+            // every iPhone), not shrinking with it when there are fewer tabs or in landscape.
+            .frame(maxWidth: 500)
+            .padding(.horizontal, 21)
             .padding(.bottom, 8)
             .sensoryFeedback(.impact(weight: .medium), trigger: dragOffset < -stopThreshold)
     }
@@ -79,7 +80,7 @@ struct MiniPlayer: View {
         }
         .labelStyle(.iconOnly)
         .buttonStyle(MiniPlayerButtonStyle())
-        .padding(.leading, 8)
+        .padding(.leading, 12)
         .padding(.trailing, 8)
         .padding(.vertical, 8)
         .modifier(MiniPlayerGlass(shape: shape))
