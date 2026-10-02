@@ -7,7 +7,7 @@ import Observation
 /// FileCat lists its servers, without passwords, in its library manifest, and MusiCat follows that
 /// list: servers changed in FileCat change here, servers removed there go away here. Passwords come
 /// from FileCat itself (`ServerShareRequest`) once the user agrees there, and are kept in MusiCat's
-/// own keychain. The protocol code (SMB, NFS, WebDAV) is FileCat's, compiled into MusiCat too.
+/// own keychain. The protocol code (SMB, NFS, WebDAV, SFTP, FTP) is FileCat's, compiled into MusiCat too.
 @MainActor
 @Observable
 final class ServerStore {

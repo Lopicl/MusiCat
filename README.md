@@ -7,7 +7,7 @@ What's there so far:
 - **Settings**: connect FileCat's Local Storage (folder picker, remembered with a bookmark), add
   other folders, and see the folders added in FileCat (from its library manifest). iOS gives each
   app its own access, so FileCat's folders have to be picked once in MusiCat too.
-- **FileCat's servers** (SMB, NFS, WebDAV, Nextcloud): *Import Servers from FileCat* opens
+- **FileCat's servers** (SMB, NFS, WebDAV, Nextcloud, SFTP, FTP): *Import Servers from FileCat* opens
   FileCat, which asks before handing over the servers and their passwords (kept in MusiCat's own
   keychain). With FileCat's library connected, MusiCat then follows FileCat's list: renamed or
   edited servers update, removed ones disappear, and after a password change *Update from FileCat*
