@@ -1,4 +1,5 @@
 import AVKit
+import FileCatKit
 import SwiftUI
 
 extension View {
@@ -33,7 +34,7 @@ struct MiniPlayer: View {
     @State private var dragOffset: CGFloat = 0
     @State private var isDismissing = false
 
-    private let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+    private let shape = Capsule()
     /// How far the pill has to travel before letting go stops playback.
     private let stopThreshold: CGFloat = 110
 
@@ -45,15 +46,15 @@ struct MiniPlayer: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("miniPlayer")
             .accessibilityAction(named: "Stop Playback") { player.stop() }
-            .frame(maxWidth: 500)
-            .padding(.horizontal, 12)
+            // As wide as the tab bar's pill below it.
+            .matchingTabBarPill()
             .padding(.bottom, 8)
             .sensoryFeedback(.impact(weight: .medium), trigger: dragOffset < -stopThreshold)
     }
 
     private var pill: some View {
         HStack(spacing: 12) {
-            ArtworkView(image: player.artwork, cornerRadius: 6)
+            ArtworkView(image: player.artwork, cornerRadius: 10)
                 .frame(width: 40, height: 40)
 
             VStack(alignment: .leading, spacing: 1) {
@@ -79,10 +80,9 @@ struct MiniPlayer: View {
         .labelStyle(.iconOnly)
         .buttonStyle(MiniPlayerButtonStyle())
         .padding(.leading, 8)
-        .padding(.trailing, 4)
+        .padding(.trailing, 8)
         .padding(.vertical, 8)
-        .background(.regularMaterial, in: shape)
-        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
+        .modifier(MiniPlayerGlass(shape: shape))
         .contentShape(shape)
         .onTapGesture(perform: onOpen)
         .contextMenu {
@@ -137,6 +137,21 @@ struct MiniPlayer: View {
                     }
                 }
             }
+    }
+}
+
+/// Liquid Glass on iOS 26 and later, like the tab bar under it; a material before that.
+private struct MiniPlayerGlass: ViewModifier {
+    let shape: Capsule
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content.glassEffect(.regular.interactive(), in: shape)
+        } else {
+            content
+                .background(.regularMaterial, in: shape)
+                .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
+        }
     }
 }
 
