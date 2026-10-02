@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+<defs>
+<mask id="cat" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024">
+<rect width="1024" height="1024" fill="#FFFFFF"/>
+<g fill="#000000" stroke="#000000" stroke-width="16" stroke-linejoin="round">
+<ellipse cx="410" cy="682" rx="124" ry="100"/>
+<polygon points="290,690 300,522 392,592"/>
+<polygon points="428,592 520,522 530,690"/>
+</g>
+</mask>
+</defs>
+<g transform="translate(5,-20)">
+<g mask="url(#cat)" fill="#FFFFFF">
+<rect x="571" y="190" width="64" height="460"/>
+<path d="M571 190 L635 190 C640 320 760 360 810 500 C830 560 815 620 775 665 C780 580 730 520 635 480 L571 480 Z"/>
+<circle cx="410" cy="650" r="225"/>
+</g>
+</g>
+</svg>
