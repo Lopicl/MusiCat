@@ -109,6 +109,14 @@ struct SettingsView: View {
                 Text("In the folder picker, go to On My iPhone and select FileCat. Music in FileCat's Local Storage then shows up here, and stays in sync.")
             }
 
+            Section {
+                SharedStorageRows(otherApp: "FileCat")
+            } header: {
+                Text("Shared Storage")
+            } footer: {
+                Text("A test of storage shared with FileCat. Open FileCat once, then come back here.")
+            }
+
             ServersSection(errorMessage: $errorMessage)
 
             if !library.fileCatFolders.isEmpty {

@@ -35,6 +35,7 @@ struct MusiCatApp: App {
         #endif
         _library = State(initialValue: library)
         _player = State(initialValue: HiResPlayer(servers: library.servers))
+        SharedStorageCheck.record(app: "MusiCat")
     }
 
     var body: some Scene {
